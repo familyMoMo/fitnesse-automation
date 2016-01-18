@@ -7,21 +7,16 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import self.family.entry.HttpDeleteWithBody;
 import self.family.util.JsonUtil;
+import sun.net.www.http.HttpClient;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -50,7 +45,7 @@ public class APIController {
      * @param paramMap 请求参数
      */
     public void setParameters(Map<String, String> paramMap){
-        //Todo 上传文件的处理
+        //Todo 请求参数为文件或其他类型
         for (Entry<String, String> entry : paramMap.entrySet())
             parameters.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 
@@ -72,6 +67,10 @@ public class APIController {
         }
         final int size =  headerList.size();
         headers = (Header[])headerList.toArray(new Header[size]);
+    }
+
+    private void request(HttpClient httpClient, HttpRequestBase httpRequestBase) {
+        //Todo 超时重新请求 and 异常处理
     }
 
     /**
@@ -114,6 +113,7 @@ public class APIController {
     }
 
     /**
+     * Delete请求
      * @param url 请求地址
      */
     public void doDelete(String url){
@@ -149,13 +149,14 @@ public class APIController {
 
     /**
      * 设置断言列表
-     * @param paramList 断言列表,若为Json需JsonPath
+     * @param checkParamList 断言列表,若为Json需JsonPath
      */
     public void setCheckParameters(ArrayList<String> checkParamList){
         checkParameters = checkParamList;
     }
 
     /**
+     * 设置期望值列表
      * @param expectParamList 期望值列表
      */
     public void setExpectParameters(ArrayList<String> expectParamList) {
